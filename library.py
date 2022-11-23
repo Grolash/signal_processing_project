@@ -2,6 +2,7 @@
 Library for the signal processing project.
 Utilitarian functions for the project.
 """
+import scipy.io.wavfile as wf
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -179,3 +180,23 @@ def create_bandstop_filter(freq, sampling_freq):
     d = [1, -2 * rho * np.cos(bandstop_theta), rho ** 2]
     w, h = sig.freqz(n, d, worN=2048, fs=sampling_freq)
     return n, d, w, h, rho, k
+
+def normalise(s):
+    """
+    Given a signal, returns the normalised signal.
+    """
+    return s / max(abs(s))
+
+## 2 - Anti-aliasing filter synthesis
+def create_filter_cheby(wp, ws, gpass, gstop, fs):
+    """
+    Given the filter parameters, returns the filter.
+    """
+    n, wn = sig.cheb1ord(wp, ws, gpass, gstop, fs=fs)
+    b, a = sig.cheby1(n, gpass, wn, btype='lowpass', analog=False, output='ba', fs=fs)
+    return b, a
+
+def create_filter_cauer(wp, ws, gpass, gstop, fs):
+    """
+    Given the filter parameters, returns the filter.
+    """
