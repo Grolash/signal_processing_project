@@ -190,13 +190,9 @@ def normalise(s):
 ## 2 - Anti-aliasing filter synthesis
 def create_filter_cheby(wp, ws, gpass, gstop, fs):
     """
-    Given the filter parameters, returns the filter.
+    Given the passband freq, the stopband freq, the passband ripple,
+    the stopband attenuation and the sampling freq, returns the filter.
     """
-    n, wn = sig.cheb1ord(wp, ws, gpass, gstop, fs=fs)
-    b, a = sig.cheby1(n, gpass, wn, btype='lowpass', analog=False, output='ba', fs=fs)
-    return b, a
-
-def create_filter_cauer(wp, ws, gpass, gstop, fs):
-    """
-    Given the filter parameters, returns the filter.
-    """
+    n, wn = sig.cheb1ord(wp, ws, gpass, gstop, fs)
+    b, a = sig.cheby1(n, gpass, wn, 'lowpass', fs)
+    return b, a, n, wn
